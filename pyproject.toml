@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "physics-env"
@@ -13,10 +13,17 @@ dependencies = [
     "pydantic>=2.8.2",
     "openai>=1.40.0",
     "httpx>=0.27.0",
+    "openenv-core>=0.2.0"   # <-- ADDED for the validator
 ]
 
 [project.optional-dependencies]
 dev = ["pytest", "pytest-asyncio", "httpx"]
 
+# <-- ADDED Entry Point for the validator
+[project.scripts]
+server = "server.app:main"
+
 [tool.setuptools.packages.find]
 where = ["."]
+# <-- ADDED to ensure all your custom files are packaged correctly
+include = ["server*", "models*", "problems*", "grader*"]
