@@ -6,6 +6,7 @@ Exposes POST /reset, POST /step, GET /state, GET /health, GET /tasks
 from __future__ import annotations
 import sys
 import os
+import uvicorn  # Added for deployment entry point
 
 # Make sure parent directory (where models.py, problems.py, grader.py live) is on path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -46,6 +47,11 @@ class StepRequest(BaseModel):
 # Endpoints
 # ---------------------------------------------------------------------------
 
+@app.get("/")
+def read_root():
+    # Updated to direct users to your Swagger UI
+    return {"message": "Welcome to PhysicsEnv! Go to /docs for the API interface."}
+
 @app.get("/health")
 def health():
     return {"status": "ok", "environment": "physics_env"}
@@ -71,3 +77,14 @@ def step(req: StepRequest):
 @app.get("/state")
 def state():
     return JSONResponse(content=_env.state())
+
+
+# ---------------------------------------------------------------------------
+# Deployment Entry Point
+# ---------------------------------------------------------------------------
+def main():
+    """Entry point for the deployment server."""
+    uvicorn.run("server.app:app", host="0.0.0.0", port=7860)
+
+if __name__ == "__main__":
+    main()
