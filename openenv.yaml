@@ -1,31 +1,39 @@
 spec_version: 1
 name: physics_env
-type: step
-runtime: docker
-app: server/app.py
-port: 7860
+version: 1.0.0
 description: >
   A reinforcement learning environment for solving physics problems spanning
   Classical Mechanics, Newtonian Mechanics, Quantum Mechanics, Special Relativity,
   Electromagnetism, and Thermodynamics. An LLM agent receives a physics problem
   and must return the correct numerical answer with units.
 
-# --- THIS IS THE MISSING BLOCK ---
-grader:
-  type: python
-  path: grader.py
-# ---------------------------------
+type: step
+runtime: docker
 
+app:
+  module: server.app
+  port: 7860
+
+# We use ID instead of NAME to pass the strict validator!
 tasks:
-  - name: classical_mechanics_easy
+  - id: classical_mechanics_easy
     difficulty: easy
     description: Basic kinematics and Newton's laws problems
-  - name: thermodynamics_medium
+  - id: thermodynamics_medium
     difficulty: medium
     description: Ideal gas, heat transfer, and energy problems
-  - name: quantum_relativity_hard
+  - id: quantum_relativity_hard
     difficulty: hard
     description: Quantum mechanics and special relativity problems
+
+# Explicitly defining the reward schema for the platform
+reward:
+  type: continuous
+  range: [0.0, 1.0]
+  components:
+    - name: correct_answer
+      weight: 1.0
+      description: "1.0 for correct answer and unit, 0.7 for missing unit, 0.3 for order of magnitude."
 
 supports_concurrent_sessions: false
 max_concurrent_envs: 1
