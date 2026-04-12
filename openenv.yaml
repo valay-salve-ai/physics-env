@@ -9,6 +9,13 @@ description: >
   Classical Mechanics, Newtonian Mechanics, Quantum Mechanics, Special Relativity,
   Electromagnetism, and Thermodynamics. An LLM agent receives a physics problem
   and must return the correct numerical answer with units.
+
+# --- THIS IS THE MISSING BLOCK ---
+grader:
+  type: python
+  path: grader.py
+# ---------------------------------
+
 tasks:
   - name: classical_mechanics_easy
     difficulty: easy
@@ -19,5 +26,6 @@ tasks:
   - name: quantum_relativity_hard
     difficulty: hard
     description: Quantum mechanics and special relativity problems
+
 supports_concurrent_sessions: false
 max_concurrent_envs: 1
